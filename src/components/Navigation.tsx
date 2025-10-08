@@ -1,21 +1,21 @@
 import { Search, Bell, User } from 'lucide-react';
 import logo from './logo.png';
+import {NavLink} from "react-router-dom";
 
 type NavigationProps = {
   currentPage: string;
-  onNavigate: (page: string) => void;
 };
 
-export default function Navigation({ currentPage, onNavigate }: NavigationProps) {
+export default function Navigation({ currentPage }: NavigationProps) {
   const navItems = [
-    { id: 'inicio', label: 'Inicio' },
-    { id: 'eventos', label: 'Eventos' },
-    { id: 'artistas', label: 'Artistas' },
-    { id: 'comunidad', label: 'Comunidad' },
-    { id: 'nosotros', label: 'Nosotros' },
-    { id: 'galeria', label: 'Galería' },
-    { id: 'contacto', label: 'Contacto' },
-    { id: 'compras', label: 'Compras' },
+    { id: '/', label: 'Inicio' },
+    { id: '/eventos', label: 'Eventos' },
+    { id: '/artistas', label: 'Artistas' },
+    { id: '/comunidad', label: 'Comunidad' },
+    { id: '/nosotros', label: 'Nosotros' },
+    { id: '/galeria', label: 'Galería' },
+    { id: '/contacto', label: 'Contacto' },
+    { id: '/compras', label: 'Compras' },
   ];
 
   return (
@@ -23,26 +23,27 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
-            <button
-              onClick={() => onNavigate('inicio')}
-              className="flex items-center gap-2 text-white hover:text-violet-400 transition-colors"
-            >
-              <img className="w-16" src={logo} alt="logo"/>
-            </button>
+            <NavLink to='/'>
+              <button
+                className="flex items-center gap-2 text-white hover:text-violet-400 transition-colors"
+              >
+                <img className="w-16" src={logo} alt="logo"/>
+              </button>
+            </NavLink>
 
             <div className="hidden md:flex items-center gap-6">
               {navItems.slice(0, 4).map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => onNavigate(item.id)}
-                  className={`text-sm font-medium transition-colors ${
-                    currentPage === item.id
-                      ? 'text-white'
-                      : 'text-gray-300 hover:text-white'
-                  }`}
-                >
-                  {item.label}
-                </button>
+                <NavLink to={item.id} key={item.id}>
+                  <button
+                    className={`text-sm font-medium transition-colors ${
+                      currentPage === item.id
+                        ? 'text-white'
+                        : 'text-gray-300 hover:text-white'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                </NavLink>
               ))}
             </div>
           </div>
@@ -71,17 +72,17 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
       <div className="md:hidden border-t border-white/10">
         <div className="flex overflow-x-auto px-4 py-2 gap-4">
           {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
-              className={`text-sm font-medium whitespace-nowrap transition-colors ${
-                currentPage === item.id
-                  ? 'text-white'
-                  : 'text-gray-300 hover:text-white'
-              }`}
-            >
-              {item.label}
-            </button>
+            <NavLink to={item.id} key={item.id}>
+              <button
+                className={`text-sm font-medium whitespace-nowrap transition-colors ${
+                  currentPage === item.id
+                    ? 'text-white'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                {item.label}
+              </button>
+            </NavLink>
           ))}
         </div>
       </div>

@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { supabase, Event, TicketPurchase } from '../lib/supabase';
 import { Calendar, MapPin, Clock, Users, ShoppingCart, CheckCircle } from 'lucide-react';
+import {useParams} from "react-router-dom";
 
-type PurchasePageProps = {
-  eventId?: string;
-};
-
-export default function PurchasePage({ eventId }: PurchasePageProps) {
+export default function PurchasePage() {
+  const { eventId } = useParams();
   const [event, setEvent] = useState<Event | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [formData, setFormData] = useState({

@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 import { supabase, Event } from '../lib/supabase';
 import { Calendar, MapPin, Users, Clock } from 'lucide-react';
+import {Link} from "react-router-dom";
 
-type EventsPageProps = {
-  onNavigate: (page: string, eventId?: string) => void;
-};
-
-export default function EventsPage({ onNavigate }: EventsPageProps) {
+export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string>('all');
@@ -131,69 +128,67 @@ export default function EventsPage({ onNavigate }: EventsPageProps) {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEvents.map((event) => (
-              <div
-                key={event.id}
-                className="group bg-white/5 rounded-2xl overflow-hidden hover:bg-white/10 transition-all cursor-pointer border border-white/10 hover:border-violet-500/50 hover:shadow-xl hover:shadow-violet-500/20"
-                onClick={() => onNavigate('compras', event.id)}
-              >
-                <div className="relative h-56 overflow-hidden">
-                  <img
-                    src={event.image_url}
-                    alt={event.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 left-3 bg-violet-600/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold uppercase">
-                    {event.genre}
+              <Link to={`/compras/${event.id}`} key={event.id}>
+                <div className="group bg-white/5 rounded-2xl overflow-hidden hover:bg-white/10 transition-all cursor-pointer border border-white/10 hover:border-violet-500/50 hover:shadow-xl hover:shadow-violet-500/20">
+                  <div className="relative h-56 overflow-hidden">
+                    <img
+                      src={event.image_url}
+                      alt={event.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3 bg-violet-600/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold uppercase">
+                      {event.genre}
+                    </div>
+                    <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      ${event.price.toLocaleString()}
+                    </div>
                   </div>
-                  <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    ${event.price.toLocaleString()}
+
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-violet-400 transition-colors">
+                      {event.title}
+                    </h3>
+
+                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                      {event.description}
+                    </p>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-gray-300 text-sm">
+                        <Calendar className="w-4 h-4 text-violet-400" />
+                        {new Date(event.event_date).toLocaleDateString('es-CO', {
+                          weekday: 'long',
+                          day: 'numeric',
+                          month: 'long',
+                        })}
+                      </div>
+
+                      <div className="flex items-center gap-2 text-gray-300 text-sm">
+                        <Clock className="w-4 h-4 text-violet-400" />
+                        {new Date(event.event_date).toLocaleTimeString('es-CO', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </div>
+
+                      <div className="flex items-center gap-2 text-gray-300 text-sm">
+                        <MapPin className="w-4 h-4 text-violet-400" />
+                        {event.venue}, {event.city}
+                      </div>
+
+                      <div className="flex items-center gap-2 text-gray-300 text-sm">
+                        <Users className="w-4 h-4 text-violet-400" />
+                        {event.capacity - event.tickets_sold} cupos disponibles de{' '}
+                        {event.capacity}
+                      </div>
+                    </div>
+
+                    <button className="w-full mt-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white py-3 rounded-full font-semibold transition-all transform group-hover:scale-105 shadow-lg shadow-violet-500/50">
+                      Comprar Entradas
+                    </button>
                   </div>
                 </div>
-
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-violet-400 transition-colors">
-                    {event.title}
-                  </h3>
-
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-                    {event.description}
-                  </p>
-
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-gray-300 text-sm">
-                      <Calendar className="w-4 h-4 text-violet-400" />
-                      {new Date(event.event_date).toLocaleDateString('es-CO', {
-                        weekday: 'long',
-                        day: 'numeric',
-                        month: 'long',
-                      })}
-                    </div>
-
-                    <div className="flex items-center gap-2 text-gray-300 text-sm">
-                      <Clock className="w-4 h-4 text-violet-400" />
-                      {new Date(event.event_date).toLocaleTimeString('es-CO', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </div>
-
-                    <div className="flex items-center gap-2 text-gray-300 text-sm">
-                      <MapPin className="w-4 h-4 text-violet-400" />
-                      {event.venue}, {event.city}
-                    </div>
-
-                    <div className="flex items-center gap-2 text-gray-300 text-sm">
-                      <Users className="w-4 h-4 text-violet-400" />
-                      {event.capacity - event.tickets_sold} cupos disponibles de{' '}
-                      {event.capacity}
-                    </div>
-                  </div>
-
-                  <button className="w-full mt-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white py-3 rounded-full font-semibold transition-all transform group-hover:scale-105 shadow-lg shadow-violet-500/50">
-                    Comprar Entradas
-                  </button>
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

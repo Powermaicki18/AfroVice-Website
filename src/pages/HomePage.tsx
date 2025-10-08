@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 import { supabase, Event } from '../lib/supabase';
-import { Calendar, MapPin, Users } from 'lucide-react';
+import {Calendar, MapPin, Users} from 'lucide-react';
+import { Link } from "react-router-dom";
 
-type HomePageProps = {
-  onNavigate: (page: string) => void;
-};
-
-export default function HomePage({ onNavigate }: HomePageProps) {
+export default function HomePage() {
   const [featuredEvents, setFeaturedEvents] = useState<Event[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string>('afro');
   const [cityEvents, setCityEvents] = useState<{ city: string; count: number }[]>([]);
@@ -75,12 +72,13 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             Descubre los mejores eventos de música afro, dancehall y reggaetón en
             todo el país.
           </p>
-          <button
-            onClick={() => onNavigate('eventos')}
-            className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-lg shadow-violet-500/50"
-          >
-            Explorar Eventos
-          </button>
+          <Link to="/eventos">
+            <button
+              className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-lg shadow-violet-500/50"
+            >
+              Explorar Eventos
+            </button>
+          </Link>
         </div>
       </div>
 
@@ -110,41 +108,42 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {genreEvents.map((event) => (
-              <div
-                key={event.id}
-                className="group bg-white/5 rounded-2xl overflow-hidden hover:bg-white/10 transition-all cursor-pointer border border-white/10 hover:border-violet-500/50 hover:shadow-xl hover:shadow-violet-500/20"
-                onClick={() => onNavigate('eventos')}
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={event.image_url}
-                    alt={event.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 right-3 bg-violet-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    ${event.price.toLocaleString()}
+              <Link to='/eventos' key={event.id}>
+                <div
+                  key={event.id}
+                  className="group bg-white/5 rounded-2xl overflow-hidden hover:bg-white/10 transition-all cursor-pointer border border-white/10 hover:border-violet-500/50 hover:shadow-xl hover:shadow-violet-500/20"
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={event.image_url}
+                      alt={event.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 right-3 bg-violet-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      ${event.price.toLocaleString()}
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-xl font-bold text-white mb-2">{event.title}</h3>
+                    <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
+                      <Calendar className="w-4 h-4" />
+                      {new Date(event.event_date).toLocaleDateString('es-CO', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })}
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-400 text-sm mb-3">
+                      <MapPin className="w-4 h-4" />
+                      {event.venue}, {event.city}
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-400 text-sm">
+                      <Users className="w-4 h-4" />
+                      {event.capacity - event.tickets_sold} cupos disponibles
+                    </div>
                   </div>
                 </div>
-                <div className="p-5">
-                  <h3 className="text-xl font-bold text-white mb-2">{event.title}</h3>
-                  <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
-                    <Calendar className="w-4 h-4" />
-                    {new Date(event.event_date).toLocaleDateString('es-CO', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                    })}
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-400 text-sm mb-3">
-                    <MapPin className="w-4 h-4" />
-                    {event.venue}, {event.city}
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-400 text-sm">
-                    <Users className="w-4 h-4" />
-                    {event.capacity - event.tickets_sold} cupos disponibles
-                  </div>
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
@@ -155,30 +154,28 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {cityEvents.map(({ city, count }) => (
-              <div
-                key={city}
-                className="relative h-64 rounded-2xl overflow-hidden group cursor-pointer"
-                onClick={() => onNavigate('eventos')}
-              >
-                <img
-                  src={
-                    city === 'Bogotá'
-                      ? 'https://images.pexels.com/photos/208723/pexels-photo-208723.jpeg?auto=compress&cs=tinysrgb&w=800'
-                      : city === 'Medellín'
-                      ? 'https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg?auto=compress&cs=tinysrgb&w=800'
-                      : 'https://images.pexels.com/photos/1141853/pexels-photo-1141853.jpeg?auto=compress&cs=tinysrgb&w=800'
-                  }
-                  alt={city}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">
-                    Eventos en {city}
-                  </h3>
-                  <p className="text-gray-200">{count} eventos próximos</p>
+              <Link to='/eventos' key={city}>
+                <div className="relative h-64 rounded-2xl overflow-hidden group cursor-pointer">
+                  <img
+                    src={
+                      city === 'Bogotá'
+                        ? 'https://images.pexels.com/photos/208723/pexels-photo-208723.jpeg?auto=compress&cs=tinysrgb&w=800'
+                        : city === 'Medellín'
+                        ? 'https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg?auto=compress&cs=tinysrgb&w=800'
+                        : 'https://images.pexels.com/photos/1141853/pexels-photo-1141853.jpeg?auto=compress&cs=tinysrgb&w=800'
+                    }
+                    alt={city}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="text-2xl font-bold text-white mb-2">
+                      Eventos en {city}
+                    </h3>
+                    <p className="text-gray-200">{count} eventos próximos</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
