@@ -27,7 +27,8 @@ export default function ArtistsPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {loading ? <span>Loading...</span> : artists.map((artist, index) => (
+                    {loading ? <p className='text-center text-white'>Loading...</p> : null}
+                    {artists.map((artist, index) => (
                         <div
                             key={index}
                             className="bg-white/5 rounded-2xl overflow-hidden border border-white/10 hover:border-violet-500/50 hover:bg-white/10 transition-all group"
