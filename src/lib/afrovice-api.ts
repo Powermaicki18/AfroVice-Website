@@ -181,6 +181,10 @@ class AfroviceApi {
 
         return response.data;
     }
+
+    async deleteComment(commentId: Comment['id']): Promise<void> {
+        await this.http.delete<Comment>(`/comments/${commentId}`);
+    }
 }
 
 export default new AfroviceApi();

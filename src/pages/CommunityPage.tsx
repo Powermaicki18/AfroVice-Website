@@ -1,6 +1,6 @@
-import { Users, Heart, MessageCircle } from 'lucide-react';
+import { Users, Heart, MessageCircle, Trash2 } from 'lucide-react';
 import useApi from "../hooks/useApi.ts";
-import AfroviceApi from "../lib/afrovice-api.ts";
+import AfroviceApi, {Comment} from "../lib/afrovice-api.ts";
 import moment from "moment";
 import {FormEvent, useState} from "react";
 
@@ -16,7 +16,6 @@ export default function CommunityPage() {
 
   const handleSubmit = async (e: FormEvent): Promise<void> => {
       e.preventDefault();
-      console.log(newComment);
       AfroviceApi.createComment({
           message: newComment,
           user_id: 1,
@@ -26,6 +25,11 @@ export default function CommunityPage() {
           setNewComment('');
       });
   };
+
+  const deleteComment = (commentId: Comment['id']) => {
+      AfroviceApi.deleteComment(commentId);
+      setComments(prev => prev.filter(comment => comment.id !== commentId));
+  }
 
   return (
     <div className="min-h-screen bg-[#1a0f2e] pt-24 pb-16">
@@ -83,7 +87,7 @@ export default function CommunityPage() {
               {comments.map((post, index) => (
                 <div
                   key={index}
-                  className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all"
+                  className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all group"
                 >
                   <div className="flex items-start gap-4">
                     <img
@@ -91,7 +95,7 @@ export default function CommunityPage() {
                       alt={post.user.name}
                       className="w-12 h-12 rounded-full object-cover"
                     />
-                    <div className="flex-1">
+                    <div className="flex-1 relative">
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="font-semibold text-white">
                           {post.user.name}
@@ -100,7 +104,12 @@ export default function CommunityPage() {
                           {moment(post.created_at).format("MMM D, YYYY")}
                         </span>
                       </div>
+
                       <p className="text-gray-300 mb-4">{post.message}</p>
+                      <button onClick={() => deleteComment(post.id)} className="absolute right-0.5 bottom-0.5 opacity-0 group-hover:opacity-100 transition">
+                        <Trash2 className="w-6 h-6 text-white" />
+                      </button>
+
                     </div>
                   </div>
                 </div>
