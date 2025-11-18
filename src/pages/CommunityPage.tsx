@@ -21,7 +21,10 @@ export default function CommunityPage() {
           message: newComment,
           user_id: 1,
           presentation_id: 1,
-      }).then((comment) => setComments(prev => [...prev, comment]));
+      }).then((comment) => {
+          setComments(prev => [...prev, comment]);
+          setNewComment('');
+      });
   };
 
   return (
