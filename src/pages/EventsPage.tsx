@@ -1,18 +1,9 @@
-import { useEffect, useState } from 'react';
-import AfroViceAPI, {Event} from "../lib/afrovice-api.ts";
 import EventCard from "../components/EventCard.tsx";
+import useApi from "../hooks/useApi.ts";
+import AfroviceApi from "../lib/afrovice-api.ts";
 
 export default function EventsPage() {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        setLoading(true);
-        AfroViceAPI.getEvents().then(response => {
-            setEvents(response);
-            setLoading(false);
-        });
-    }, []);
+    const [events, loading] = useApi(AfroviceApi.getEvents(), []);
 
   return (
     <div className="min-h-screen bg-[#1a0f2e] pt-24 pb-16">

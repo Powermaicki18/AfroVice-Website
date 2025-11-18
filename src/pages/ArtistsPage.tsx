@@ -1,18 +1,9 @@
 import {Music4, Instagram, Twitter} from 'lucide-react';
-import {useEffect, useState} from "react";
-import AfroViceAPI, {Artist} from "../lib/afrovice-api.ts";
+import useApi from "../hooks/useApi.ts";
+import AfroviceApi from "../lib/afrovice-api.ts";
 
 export default function ArtistsPage() {
-    const [artists, setArtists] = useState<Array<Artist>>([]);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        setLoading(true);
-        AfroViceAPI.getArtists().then(response => {
-            setArtists(response);
-            setLoading(false);
-        });
-    }, []);
+    const [artists, loading] = useApi(AfroviceApi.getArtists(), []);
 
     return (
         <div className="min-h-screen bg-[#1a0f2e] pt-24 pb-16">

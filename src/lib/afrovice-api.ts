@@ -55,11 +55,15 @@ export type NewTicket= Omit<Ticket, 'id'>;
 export type Comment = {
     id: number;
     message: string;
-    presentation_id: number;
-    user_id: number;
+    presentation: Presentation;
+    user: User;
+    created_at: string;
 }
 
-export type NewComment= Omit<Comment, 'id'>;
+export type NewComment = Pick<Comment, 'message'> & {
+    user_id: User['id'];
+    presentation_id: Presentation['id'];
+};
 
 class AfroviceApi {
     private http: AxiosInstance;
