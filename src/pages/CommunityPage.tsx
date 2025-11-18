@@ -1,38 +1,28 @@
-import { Users, Heart, MessageCircle, Share2 } from 'lucide-react';
+import { Users, Heart, MessageCircle } from 'lucide-react';
+import useApi from "../hooks/useApi.ts";
+import AfroviceApi from "../lib/afrovice-api.ts";
+import moment from "moment";
+import {FormEvent, useState} from "react";
 
 export default function CommunityPage() {
-  const posts = [
-    {
-      author: 'María González',
-      avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=200',
-      content: '¡Increíble noche en el evento de Afro! La energía estaba en otro nivel 🔥',
-      likes: 245,
-      comments: 32,
-      time: 'Hace 2 horas',
-    },
-    {
-      author: 'Carlos Ramírez',
-      avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=200',
-      content: 'El DJ estuvo increíble anoche. Ya quiero que sea el próximo evento 🎵',
-      likes: 189,
-      comments: 28,
-      time: 'Hace 5 horas',
-    },
-    {
-      author: 'Andrea Silva',
-      avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200',
-      content: 'Primera vez en un evento de dancehall y quedé enamorada. ¡Volveré seguro!',
-      likes: 312,
-      comments: 45,
-      time: 'Hace 1 día',
-    },
-  ];
+  const [comments, , setComments] = useApi(AfroviceApi.getComments(), []);
+  const [newComment, setNewComment] = useState("");
 
   const stats = [
     { label: 'Miembros', value: '25,000+', icon: Users },
     { label: 'Eventos Realizados', value: '500+', icon: Heart },
     { label: 'Ciudades', value: '15+', icon: MessageCircle },
   ];
+
+  const handleSubmit = async (e: FormEvent): Promise<void> => {
+      e.preventDefault();
+      console.log(newComment);
+      AfroviceApi.createComment({
+          message: newComment,
+          user_id: 1,
+          presentation_id: 1,
+      }).then((comment) => setComments(prev => [...prev, comment]));
+  };
 
   return (
     <div className="min-h-screen bg-[#1a0f2e] pt-24 pb-16">
@@ -68,57 +58,46 @@ export default function CommunityPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10 mb-6">
+            <form onSubmit={handleSubmit} className="bg-white/5 rounded-2xl p-6 border border-white/10 mb-6">
               <h2 className="text-xl font-bold text-white mb-4">
                 ¿Qué está pasando?
               </h2>
               <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Comparte tu experiencia..."
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 transition-all resize-none"
                 rows={3}
               />
               <div className="flex justify-end mt-3">
-                <button className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white px-6 py-2 rounded-full font-semibold transition-all transform hover:scale-105 shadow-lg shadow-violet-500/50">
+                <button type='submit' className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white px-6 py-2 rounded-full font-semibold transition-all transform hover:scale-105 shadow-lg shadow-violet-500/50">
                   Publicar
                 </button>
               </div>
-            </div>
+            </form>
 
             <div className="space-y-6">
-              {posts.map((post, index) => (
+              {comments.map((post, index) => (
                 <div
                   key={index}
                   className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all"
                 >
                   <div className="flex items-start gap-4">
                     <img
-                      src={post.avatar}
-                      alt={post.author}
+                      src={post.user.photo}
+                      alt={post.user.name}
                       className="w-12 h-12 rounded-full object-cover"
                     />
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="font-semibold text-white">
-                          {post.author}
+                          {post.user.name}
                         </h3>
                         <span className="text-sm text-gray-400">
-                          {post.time}
+                          {moment(post.created_at).format("MMM D, YYYY")}
                         </span>
                       </div>
-                      <p className="text-gray-300 mb-4">{post.content}</p>
-                      <div className="flex items-center gap-6">
-                        <button className="flex items-center gap-2 text-gray-400 hover:text-violet-400 transition-colors">
-                          <Heart className="w-5 h-5" />
-                          <span className="text-sm">{post.likes}</span>
-                        </button>
-                        <button className="flex items-center gap-2 text-gray-400 hover:text-violet-400 transition-colors">
-                          <MessageCircle className="w-5 h-5" />
-                          <span className="text-sm">{post.comments}</span>
-                        </button>
-                        <button className="flex items-center gap-2 text-gray-400 hover:text-violet-400 transition-colors">
-                          <Share2 className="w-5 h-5" />
-                        </button>
-                      </div>
+                      <p className="text-gray-300 mb-4">{post.message}</p>
                     </div>
                   </div>
                 </div>
