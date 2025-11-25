@@ -13,7 +13,6 @@ export default function Navigation({ currentPage }: NavigationProps) {
     { id: '/artistas', label: 'Artistas' },
     { id: '/comunidad', label: 'Comunidad' },
     { id: '/nosotros', label: 'Nosotros' },
-    { id: '/contacto', label: 'Contacto' },
     { id: '/compras', label: 'Compras' },
   ];
 

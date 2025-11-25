@@ -2,7 +2,6 @@ import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
 import EventsPage from './pages/EventsPage';
 import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
 import PurchasePage from './pages/PurchasePage';
 import ArtistsPage from './pages/ArtistsPage';
 import CommunityPage from './pages/CommunityPage';
@@ -17,7 +16,6 @@ function App() {
           <Route path="/" element={<HomePage />} index />
           <Route path="/eventos" element={<EventsPage />} />
           <Route path="/nosotros" element={<AboutPage />} />
-          <Route path="/contacto" element={<ContactPage />} />
           <Route path="/compras/:eventId" element={<PurchasePage />} />
           <Route path="/artistas" element={<ArtistsPage />} />
           <Route path="/comunidad" element={<CommunityPage />} />
