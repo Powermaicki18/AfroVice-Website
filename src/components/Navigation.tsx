@@ -29,7 +29,7 @@ export default function Navigation({ currentPage }: NavigationProps) {
             </NavLink>
 
             <div className="hidden md:flex items-center gap-6">
-              {navItems.slice(0, 4).map((item) => (
+              {navItems.map((item) => (
                 <NavLink to={item.id} key={item.id}>
                   <button
                     className={`text-sm font-medium transition-colors ${
