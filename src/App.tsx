@@ -1,7 +1,6 @@
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
 import EventsPage from './pages/EventsPage';
-import GalleryPage from './pages/GalleryPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import PurchasePage from './pages/PurchasePage';
@@ -17,7 +16,6 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} index />
           <Route path="/eventos" element={<EventsPage />} />
-          <Route path="/galeria" element={<GalleryPage />} />
           <Route path="/nosotros" element={<AboutPage />} />
           <Route path="/contacto" element={<ContactPage />} />
           <Route path="/compras/:eventId" element={<PurchasePage />} />
