@@ -1,6 +1,6 @@
 import { Users, Heart, MessageCircle, Trash2 } from 'lucide-react';
 import useApi from "../hooks/useApi.ts";
-import AfroviceApi, {Comment} from "../lib/afrovice-api.ts";
+import AfroviceApi, {Comment} from "../lib/afrovice-api";
 import moment from "moment";
 import {FormEvent, useState} from "react";
 

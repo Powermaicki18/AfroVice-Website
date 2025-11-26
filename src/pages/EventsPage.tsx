@@ -1,9 +1,9 @@
-import EventCard from "../components/EventCard.tsx";
 import useApi from "../hooks/useApi.ts";
 import AfroviceApi from "../lib/afrovice-api.ts";
+import PresentationCard from "../components/PresentationCard.tsx";
 
 export default function EventsPage() {
-    const [events, loading] = useApi(AfroviceApi.getEvents(), []);
+    const [presentations, loading] = useApi(AfroviceApi.getPresentations(), []);
 
   return (
     <div className="min-h-screen bg-[#1a0f2e] pt-24 pb-16">
@@ -19,7 +19,7 @@ export default function EventsPage() {
 
         {loading ? (
           <div className="text-white text-center py-12">Cargando eventos...</div>
-        ) : events.length === 0 ? (
+        ) : presentations.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-xl text-gray-400">
               No hay eventos disponibles con los filtros seleccionados
@@ -27,8 +27,8 @@ export default function EventsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.map((event) => (
-              <EventCard event={event} key={event.id} />
+            {presentations.map((presentation) => (
+              <PresentationCard presentation={presentation} key={presentation.id} />
             ))}
           </div>
         )}
