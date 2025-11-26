@@ -36,7 +36,7 @@ export type NewGender= Omit<Gender, 'id'>;
 
 export type Presentation = {
     id: number;
-    event_id: number;
+    event: Event;
     flyer: string;
     date_start: Date;
     date_end: Date;
@@ -50,7 +50,9 @@ export type Ticket = {
     presentation_id: number;
 }
 
-export type NewTicket= Omit<Ticket, 'id'>;
+export type NewTicket= Omit<Ticket, 'id'> & {
+    quantity: number;
+};
 
 export type Comment = {
     id: number;
@@ -164,8 +166,8 @@ class AfroviceApi {
         return response.data;
     }
 
-    async creatTicket(ticket: NewTicket): Promise<Ticket> {
-        const response = await this.http.post<Ticket>('/tickets', ticket);
+    async createTicket(ticket: NewTicket): Promise<Array<Ticket>> {
+        const response = await this.http.post<Array<Ticket>>('/tickets', ticket);
 
         return response.data;
     }

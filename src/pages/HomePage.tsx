@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import EventCard from "../components/EventCard.tsx";
+import PresentationCard from "../components/PresentationCard.tsx";
 import useApi from "../hooks/useApi.ts";
 import AfroviceApi from "../lib/afrovice-api.ts";
 
 export default function HomePage() {
-  const [events, loading] = useApi(AfroviceApi.getEvents(), []);
+  const [presentations, loading] = useApi(AfroviceApi.getPresentations(), []);
 
   return (
     <div className="min-h-screen bg-[#1a0f2e]">
@@ -44,8 +44,8 @@ export default function HomePage() {
           <div className="text-white text-center py-12">Cargando eventos...</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-              {events.slice(0, 3).map((event) => (
-                  <EventCard event={event} key={event.id} />
+              {presentations.slice(0, 3).map((presentation) => (
+                  <PresentationCard presentation={presentation} key={presentation.id} />
               ))}
           </div>
         )}

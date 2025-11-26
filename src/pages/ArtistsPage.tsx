@@ -1,6 +1,7 @@
-import {Music4, Instagram, Twitter} from 'lucide-react';
+import {Music4} from 'lucide-react';
 import useApi from "../hooks/useApi.ts";
 import AfroviceApi from "../lib/afrovice-api.ts";
+import ArtistCard from "../components/ArtistCard.tsx";
 
 export default function ArtistsPage() {
     const [artists, loading] = useApi(AfroviceApi.getArtists(), []);
@@ -20,37 +21,7 @@ export default function ArtistsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {loading ? <p className='text-center text-white'>Loading...</p> : null}
                     {artists.map((artist, index) => (
-                        <div
-                            key={index}
-                            className="bg-white/5 rounded-2xl overflow-hidden border border-white/10 hover:border-violet-500/50 hover:bg-white/10 transition-all group"
-                        >
-                            <div className="relative h-80 overflow-hidden">
-                                <img
-                                    src={artist.photo}
-                                    alt={artist.name}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                />
-                                <div
-                                    className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"/>
-                                <div className="absolute bottom-0 left-0 right-0 p-6">
-                                    <h3 className="text-2xl font-bold text-white mb-2">
-                                        {artist.name}
-                                    </h3>
-                                </div>
-                            </div>
-                            <div className="p-6 flex gap-3">
-                                <button
-                                    className="flex-1 bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg transition-all flex items-center justify-center gap-2">
-                                    <Instagram className="w-4 h-4"/>
-                                    <span className="text-sm">Instagram</span>
-                                </button>
-                                <button
-                                    className="flex-1 bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg transition-all flex items-center justify-center gap-2">
-                                    <Twitter className="w-4 h-4"/>
-                                    <span className="text-sm">Twitter</span>
-                                </button>
-                            </div>
-                        </div>
+                        <ArtistCard artist={artist} key={index}/>
                     ))}
                 </div>
 
